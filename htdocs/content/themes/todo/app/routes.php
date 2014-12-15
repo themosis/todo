@@ -17,23 +17,42 @@ Route::get('home', function(){
 
 Route::get('postTypeArchive', function($post, $query)
 {
-    if (isset($query->query_vars['task_action']) && 'create' === $query->query_vars['task_action'])
+    $action = $query->get('task_action');
+
+    if ('create' === $action)
     {
-        return 'Add a new task';
+        return View::make('tasks.create');
     }
 
     return View::make('tasks.all');
 });
 
+Route::post('postTypeArchive', function($post, $query)
+{
+    $task = Input::get('task');
+    $inserted = false;
+
+    if (!empty($task))
+    {
+        $inserted = wp_insert_post(array(
+            'post_title'        => $task,
+            'post_type'         => 'tasks',
+            'post_status'       => 'publish'
+        ));
+    }
+
+    return View::make('tasks.all')->with('taskCreated', $inserted);
+});
+
 Route::get('singular', array('tasks', function($post, $query)
 {
-    $vars = $query->query_vars;
+    $action = $query->get('task_action');
 
-    if (isset($vars['task_action']) && 'edit' === $vars['task_action'])
+    if ('edit' === $action)
     {
         return View::make('tasks.edit', array('task' => $post));
     }
-    elseif (isset($vars['task_action']) && 'delete' === $vars['task_action'])
+    elseif ('delete' === $action)
     {
         return View::make('tasks.delete', array('task' => $post));
     }
@@ -43,9 +62,9 @@ Route::get('singular', array('tasks', function($post, $query)
 
 Route::post('singular', array('tasks', function($post, $query)
 {
-    $vars = $query->query_vars;
+    $action = $query->get('task_action');
 
-    if (isset($vars['task_action']) && 'edit' === $vars['task_action'])
+    if ('edit' === $action)
     {
         $input = Input::get('task');
         $updated = wp_update_post(array('ID' => $post->ID, 'post_title' => $input));
@@ -56,7 +75,7 @@ Route::post('singular', array('tasks', function($post, $query)
             exit;
         }
     }
-    elseif (isset($vars['task_action']) && 'delete' === $vars['task_action'])
+    elseif ('delete' === $action)
     {
         $deleted = wp_delete_post($post->ID, true);
 
