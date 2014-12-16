@@ -53,14 +53,28 @@ class TasksController extends BaseController
             return $this->create();
         }
 
+        // Grab the nonce action.
+        $a = Input::get('action');
+
         // Check for editing task action.
-        $updated = wp_verify_nonce(Input::get('action'), 'task_updated');
+        $updated = wp_verify_nonce($a, 'task_updated');
 
         if ($updated)
         {
             return View::make('tasks.all')->with(array(
                 'query'     => new WP_Query($this->query),
-                'message'   => 'Task updated.'
+                'message'   => 'Task updated successfully.'
+            ));
+        }
+
+        // Check for deleted task action.
+        $deleted = wp_verify_nonce($a, 'task_deleted');
+
+        if ($deleted)
+        {
+            return View::make('tasks.all')->with(array(
+                'query'     => new WP_Query($this->query),
+                'message'   => 'Task deleted successfully.'
             ));
         }
 
@@ -135,7 +149,7 @@ class TasksController extends BaseController
                 if ($inserted)
                 {
                     return View::make('tasks.all')->with(array(
-                        'message'       => 'Task created.',
+                        'message'       => 'Task created successfully.',
                         'query'         => new WP_Query($this->query)
                     ));
                 }
@@ -165,11 +179,23 @@ class TasksController extends BaseController
 
         if ('edit' === $action)
         {
+            // Show the single task view.
             return $this->show($post);
         }
         elseif ('delete' === $action)
         {
-            return View::make('tasks.delete', array('task' => $post));
+            // Show the delete task view.
+            $delete = Input::get('action');
+
+            // Default delete nonce.
+            $nonce = wp_verify_nonce($delete, 'delete_task');
+
+            // If on delete screen.
+            // Show the task and the form in order to delete it.
+            if ($nonce)
+            {
+                return View::make('tasks.delete', array('task' => $post));
+            }
         }
 
         // If not on edit or delete screen, redirect to the tasks list.
@@ -191,20 +217,19 @@ class TasksController extends BaseController
 
         if ('edit' === $action)
         {
+            // Update the task.
             $this->update($post);
         }
         elseif ('delete' === $action)
         {
-            $deleted = wp_delete_post($post->ID, true);
-
-            if ($deleted)
-            {
-                wp_redirect(home_url('tasks'));
-                exit;
-            }
-
-            return View::make('tasks.delete', array('task' => $post));
+            // Delete the task.
+            // If there is an error, output the delete screen.
+            return $this->delete($post);
         }
+
+        // If nothing, redirect to tasks list.
+        wp_redirect(home_url('tasks'));
+        exit;
     }
 
     /**
@@ -223,11 +248,23 @@ class TasksController extends BaseController
         // Error edit nonce.
         $error = wp_verify_nonce($action, 'edit_task_error');
 
+        // Exists edit nonce.
+        $exists  = wp_verify_nonce($action, 'edit_task_exist');
+
         // If nonce verified, render the edit form in order to edit
         // the selected task.
         if ($nonce)
         {
             return View::make('tasks.edit')->with('task', $post);
+        }
+
+        // The updated task is similar to an existing one.
+        if ($exists)
+        {
+            return View::make('tasks.edit')->with(array(
+                'task'      => $post,
+                'error'     => 'A similar task already exists. Please set another task.'
+            ));
         }
 
         // There was an error when submitting the task value.
@@ -273,6 +310,11 @@ class TasksController extends BaseController
                     wp_redirect(wp_nonce_url(home_url('tasks'), 'task_updated', 'action'));
                     exit;
                 }
+
+                // Task already exists.
+                // Redirect to the edit screen with message.
+                wp_redirect(wp_nonce_url(home_url('tasks/'.$post->ID.'/edit/'), 'edit_task_exist', 'action'));
+                exit;
             }
 
             // If validation fails, the value is not valid.
@@ -286,5 +328,40 @@ class TasksController extends BaseController
         wp_redirect(home_url('tasks'));
         exit;
 
+    }
+
+    /**
+     * Handle the delete POST request.
+     *
+     * @param \WP_Post $post The task post object.
+     * @return mixed
+     */
+    private function delete($post)
+    {
+        if (wp_verify_nonce($_POST[Session::nonceName], Session::nonceAction))
+        {
+            $task = Validator::single(Input::get('task'), array('num'));
+
+            // If task is the task ID number.
+            // Delete it.
+            if (is_numeric($task))
+            {
+                $deleted = wp_delete_post($post->ID, true);
+
+                // The task is deleted.
+                // Send the user back to its tasks list.
+                if ($deleted)
+                {
+                    wp_redirect(wp_nonce_url(home_url('tasks'), 'task_deleted', 'action'));
+                    exit;
+                }
+            }
+        }
+
+        // In case of an error, show the delete screen again with a gentle warning message.
+        return View::make('tasks.delete', array(
+            'task'      => $post,
+            'error'     => 'Something went wrong. Try again please.'
+        ));
     }
 }
