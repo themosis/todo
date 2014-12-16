@@ -1,7 +1,7 @@
 <h2>Tasks:</h2>
 
-@if(isset($taskCreated) && $taskCreated)
-    <p>Your task has been added.</p>
+@if(isset($message) && $message)
+    <p>{{ $message }}</p>
 @endif
 
 <p>
@@ -12,7 +12,7 @@
     <ul>
         @while($query->have_posts())
             <?php $query->the_post(); ?>
-            <li>{{ Loop::title() }} - <a href="{{ home_url('tasks/'.Loop::id().'/edit/') }}">Edit</a> - <a href="{{ home_url('tasks/'.Loop::id().'/delete/') }}">Delete</a></li>
+            <li>{{ Loop::title() }} - <a href="{{ wp_nonce_url(home_url('tasks/'.Loop::id().'/edit/'), 'edit_task', 'action') }}">Edit</a> - <a href="{{ wp_nonce_url(home_url('tasks/'.Loop::id().'/delete/'), 'delete_task', 'action') }}">Delete</a></li>
         @endwhile
     </ul>
 @endif

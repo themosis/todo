@@ -53,6 +53,17 @@ class TasksController extends BaseController
             return $this->create();
         }
 
+        // Check for editing task action.
+        $updated = wp_verify_nonce(Input::get('action'), 'task_updated');
+
+        if ($updated)
+        {
+            return View::make('tasks.all')->with(array(
+                'query'     => new WP_Query($this->query),
+                'message'   => 'Task updated.'
+            ));
+        }
+
         // Default output. Display a list of tasks.
         return View::make('tasks.all')->with('query', new WP_Query($this->query));
     }
@@ -108,8 +119,8 @@ class TasksController extends BaseController
      */
     public function register()
     {
-        // Check form nonce and referrer
-        if (1 === wp_verify_nonce($_POST[Session::nonceName], Session::nonceAction))
+        // Check form nonce.
+        if (wp_verify_nonce($_POST[Session::nonceName], Session::nonceAction))
         {
             // Get the submitted task value.
             $task = Validator::single(Input::get('task'), array('textfield', 'min:3'));
@@ -124,7 +135,7 @@ class TasksController extends BaseController
                 if ($inserted)
                 {
                     return View::make('tasks.all')->with(array(
-                        'taskCreated'   => $inserted,
+                        'message'       => 'Task created.',
                         'query'         => new WP_Query($this->query)
                     ));
                 }
@@ -154,7 +165,7 @@ class TasksController extends BaseController
 
         if ('edit' === $action)
         {
-            return View::make('tasks.edit', array('task' => $post));
+            return $this->show($post);
         }
         elseif ('delete' === $action)
         {
@@ -180,14 +191,7 @@ class TasksController extends BaseController
 
         if ('edit' === $action)
         {
-            $input = Input::get('task');
-            $updated = wp_update_post(array('ID' => $post->ID, 'post_title' => $input));
-
-            if ($updated)
-            {
-                wp_redirect(home_url('tasks'));
-                exit;
-            }
+            $this->update($post);
         }
         elseif ('delete' === $action)
         {
@@ -201,5 +205,86 @@ class TasksController extends BaseController
 
             return View::make('tasks.delete', array('task' => $post));
         }
+    }
+
+    /**
+     * Handle the GET request for editing/show single task.
+     *
+     * @param \WP_Post $post The task post object.
+     * @return mixed
+     */
+    private function show($post)
+    {
+        $action = Input::get('action');
+
+        // Default edit nonce.
+        $nonce = wp_verify_nonce($action, 'edit_task');
+
+        // Error edit nonce.
+        $error = wp_verify_nonce($action, 'edit_task_error');
+
+        // If nonce verified, render the edit form in order to edit
+        // the selected task.
+        if ($nonce)
+        {
+            return View::make('tasks.edit')->with('task', $post);
+        }
+
+        // There was an error when submitting the task value.
+        // Return the edit view with a message.
+        if ($error)
+        {
+            return View::make('tasks.edit')->with(array(
+                'task'      => $post,
+                'error'     => 'Error when updating your task. Make sure to use alphanumeric characters only.'
+            ));
+        }
+
+        // If not allowed to edit, simply redirects to the tasks list.
+        wp_redirect(home_url('tasks'));
+        exit;
+    }
+
+    /**
+     * Handle the POST request for single task EDIT.
+     *
+     * @param \WP_Post $post
+     * @return void
+     */
+    private function update($post)
+    {
+        // Check form nonce.
+        if (wp_verify_nonce($_POST[Session::nonceName], Session::nonceAction))
+        {
+            // Validate the task input value before updating.
+            $taskInput = Validator::single(Input::get('task'), array('textfield', 'min:3'));
+
+            // If value validated
+            // update the task.
+            if (!empty($taskInput))
+            {
+                $t = new TasksModel($this->user);
+                $updated = $t->update($post, $taskInput);
+
+                // If task post updated
+                // send the user back to its tasks list.
+                if ($updated)
+                {
+                    wp_redirect(wp_nonce_url(home_url('tasks'), 'task_updated', 'action'));
+                    exit;
+                }
+            }
+
+            // If validation fails, the value is not valid.
+            // Redirect to the edit page and display an error message.
+            wp_redirect(wp_nonce_url(home_url('tasks/'.$post->ID.'/edit/'), 'edit_task_error', 'action'));
+            exit;
+        }
+
+        // If post request is not valid.
+        // Redirect the user to the tasks list.
+        wp_redirect(home_url('tasks'));
+        exit;
+
     }
 }

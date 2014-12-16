@@ -18,7 +18,7 @@ class TasksModel {
     /**
      * The logged in user.
      *
-     * @var \Themosis\Themosis\User
+     * @var \Themosis\User\User
      */
     private $user;
 
@@ -58,6 +58,26 @@ class TasksModel {
             'post_status'       => 'publish',
             'post_author'       => $this->user->ID,
             'ping_status'       => 'closed'
+        ));
+    }
+
+    /**
+     * Update a task post.
+     *
+     * @param \WP_Post $task The task post object.
+     * @param string $title
+     * @return bool|int The task post ID or false if it already exists.
+     */
+    public function update($task, $title)
+    {
+        if ($this->taskExists($title))
+        {
+            return false;
+        }
+
+        return wp_update_post(array(
+            'ID' => $task->ID,
+            'post_title' => $title
         ));
     }
 
