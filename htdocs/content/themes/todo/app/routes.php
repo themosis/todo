@@ -23,16 +23,13 @@ Route::get('home', function(){
 });
 
 // Start tasks routes.
-if (is_user_logged_in())
-{
-    Route::get('postTypeArchive', array('tasks', 'uses' => 'TasksController@index'));
+Route::get('postTypeArchive', array('tasks', 'uses' => 'TasksController@index'));
 
-    Route::post('postTypeArchive', array('tasks', 'uses' => 'TasksController@register'));
+Route::post('postTypeArchive', array('tasks', 'uses' => 'TasksController@register'));
 
-    Route::get('singular', array('tasks', 'uses' => 'TasksController@single'));
+Route::get('singular', array('tasks', 'uses' => 'TasksController@single'));
 
-    Route::post('singular', array('tasks', 'uses' => 'TasksController@modify'));
-}
+Route::post('singular', array('tasks', 'uses' => 'TasksController@modify'));
 // End tasks routes.
 
 // Listen to 404

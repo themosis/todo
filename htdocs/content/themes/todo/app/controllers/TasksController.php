@@ -18,6 +18,14 @@ class TasksController extends BaseController
 
     public function __construct()
     {
+        // Redirect to home page if users are not logged in.
+        // This is triggered for all routes using this controller.
+        if (!is_user_logged_in())
+        {
+            wp_redirect(home_url());
+            exit;
+        }
+
         $this->user = User::current();
 
         // Main query parameters used to display the tasks list.
