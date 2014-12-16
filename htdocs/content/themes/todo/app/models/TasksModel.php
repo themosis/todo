@@ -15,12 +15,22 @@ class TasksModel {
      */
     private $slug = 'tasks';
 
-    public function __construct()
+    /**
+     * The logged in user.
+     *
+     * @var \Themosis\Themosis\User
+     */
+    private $user;
+
+    public function __construct($user)
     {
+        $this->user = $user;
+
         $query = new WP_Query(array(
             'post_type'         => $this->slug,
             'posts_per_page'    => 1000,
-            'post_status'       => 'publish'
+            'post_status'       => 'publish',
+            'author'            => $this->user->ID
         ));
 
         // Fill the tasks property.
@@ -31,10 +41,9 @@ class TasksModel {
      * Insert a new task.
      *
      * @param string $title The task title.
-     * @param \WP_User $user The user who creates the task.
      * @return bool|int The post_id if inserted, false if it exists.
      */
-    public function insert($title, $user)
+    public function insert($title)
     {
         // Check if the task exists.
         if ($this->taskExists($title))
@@ -47,7 +56,7 @@ class TasksModel {
             'post_title'        => $title,
             'post_type'         => $this->slug,
             'post_status'       => 'publish',
-            'post_author'       => $user->ID,
+            'post_author'       => $this->user->ID,
             'ping_status'       => 'closed'
         ));
     }

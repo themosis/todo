@@ -109,8 +109,8 @@ class TasksController extends BaseController
             if (!empty($task))
             {
                 // Insert task data.
-                $t = new TasksModel();
-                $inserted = $t->insert($task, $this->user);
+                $t = new TasksModel($this->user);
+                $inserted = $t->insert($task);
 
                 // Return task list view with update message.
                 if ($inserted)
