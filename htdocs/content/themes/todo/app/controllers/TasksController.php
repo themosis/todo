@@ -85,11 +85,9 @@ class TasksController extends BaseController
      * Handle POST requests in order to register
      * a new task.
      *
-     * @param \WP_Post $post
-     * @param \WP_Query $query
      * @return mixed
      */
-    public function register($post, $query)
+    public function register()
     {
         // Check form nonce and referrer
         if (1 === wp_verify_nonce($_POST[Session::nonceName], Session::nonceAction))

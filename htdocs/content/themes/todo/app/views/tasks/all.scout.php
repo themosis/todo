@@ -1,7 +1,7 @@
 <h2>Tasks:</h2>
 
 @if(isset($taskCreated) && $taskCreated)
-    <p>New task added.</p>
+    <p>Your task has been added.</p>
 @endif
 
 <p>
