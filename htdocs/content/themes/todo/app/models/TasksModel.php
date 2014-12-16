@@ -31,9 +31,10 @@ class TasksModel {
      * Insert a new task.
      *
      * @param string $title The task title.
+     * @param \WP_User $user The user who creates the task.
      * @return bool|int The post_id if inserted, false if it exists.
      */
-    public function insert($title)
+    public function insert($title, $user)
     {
         // Check if the task exists.
         if ($this->taskExists($title))
@@ -45,7 +46,9 @@ class TasksModel {
         return wp_insert_post(array(
             'post_title'        => $title,
             'post_type'         => $this->slug,
-            'post_status'       => 'publish'
+            'post_status'       => 'publish',
+            'post_author'       => $user->ID,
+            'ping_status'       => 'closed'
         ));
     }
 

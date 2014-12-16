@@ -39,7 +39,7 @@ add_action('pre_get_posts', function($query) use ($tasks)
 {
     if ($tasks->getSlug() === $query->get('post_type'))
     {
-        if (isset($query->query_vars['task_action']) && 'create' === $query->get('task_action'))
+        if ('create' === $query->get('task_action'))
         {
             $query->set('posts_per_page', 0);
         }
@@ -48,4 +48,12 @@ add_action('pre_get_posts', function($query) use ($tasks)
             $query->set('posts_per_page', 500);
         }
     }
+});
+
+// Modify admin table columns
+// in order to display the author name.
+add_filter('manage_edit-'.$tasks->getSlug().'_columns', function($titles)
+{
+    $titles['author'] = __('Author');
+    return $titles;
 });

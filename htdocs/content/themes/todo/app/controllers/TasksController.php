@@ -5,23 +5,34 @@ class TasksController extends BaseController
     /**
      * Default tasks loop query.
      *
-     * @var array
+     * @var \WP_Query
      */
     private $query = array();
 
+    /**
+     * The current user ID.
+     *
+     * @var \Themosis\User\User
+     */
+    private $user;
+
     public function __construct()
     {
+        $this->user = User::current();
+
+        // Main query parameters used to display the tasks list.
         $this->query = array(
-            'post_type' => 'tasks',
-            'posts_per_page' => 500,
-            'post_status' => 'publish'
+            'post_type'         => 'tasks',
+            'posts_per_page'    => 500,
+            'post_status'       => 'publish',
+            'author'            => $this->user->ID
         );
     }
 
     /**
      * Handle the list of tasks.
      *
-     * @param \WP_Post $post
+     * @param \WP_Post|bool $post False if no posts found.
      * @param \WP_Query $query
      * @return mixed
      */
@@ -35,7 +46,7 @@ class TasksController extends BaseController
         }
 
         // Default output. Display a list of tasks.
-        return View::make('tasks.all')->with('query', $this->query);
+        return View::make('tasks.all')->with('query', new WP_Query($this->query));
     }
 
     /**
@@ -99,14 +110,14 @@ class TasksController extends BaseController
             {
                 // Insert task data.
                 $t = new TasksModel();
-                $inserted = $t->insert($task);
+                $inserted = $t->insert($task, $this->user);
 
                 // Return task list view with update message.
                 if ($inserted)
                 {
                     return View::make('tasks.all')->with(array(
                         'taskCreated'   => $inserted,
-                        'query'         => $this->query
+                        'query'         => new WP_Query($this->query)
                     ));
                 }
 

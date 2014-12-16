@@ -11,14 +11,32 @@
 
 Route::get('home', function(){
 
-    return View::make('welcome');
+    if (!is_user_logged_in())
+    {
+        return View::make('welcome');
+    }
+
+    // Logged in users are automatically redirected to their tasks list.
+    wp_redirect(home_url('tasks'));
+    exit;
 
 });
 
-Route::get('postTypeArchive', array('tasks', 'uses' => 'TasksController@index'));
+// Start tasks routes.
+if (is_user_logged_in())
+{
+    Route::get('postTypeArchive', array('tasks', 'uses' => 'TasksController@index'));
 
-Route::post('postTypeArchive', array('tasks', 'uses' => 'TasksController@register'));
+    Route::post('postTypeArchive', array('tasks', 'uses' => 'TasksController@register'));
 
-Route::get('singular', array('tasks', 'uses' => 'TasksController@single'));
+    Route::get('singular', array('tasks', 'uses' => 'TasksController@single'));
 
-Route::post('singular', array('tasks', 'uses' => 'TasksController@modify'));
+    Route::post('singular', array('tasks', 'uses' => 'TasksController@modify'));
+}
+// End tasks routes.
+
+// Listen to 404
+Route::any('404', function()
+{
+    return 'We think you are lost.';
+});
