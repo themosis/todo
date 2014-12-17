@@ -126,42 +126,107 @@ class TasksController extends BaseController
     }
 
     /**
-     * Handle POST requests in order to register
-     * a new task.
+     * Handle POST requests on tasks list view in order
+     * to register a new task or remove completed tasks.
      *
      * @return mixed
      */
     public function register()
     {
-        // Check form nonce.
-        if (wp_verify_nonce($_POST[Session::nonceName], Session::nonceAction))
+        // Check form nonce for REMOVE completed tasks requests.
+        if (wp_verify_nonce(Input::get(APP_NONCE), 'task_remove'))
         {
-            // Get the submitted task value.
-            $task = Validator::single(Input::get('task'), array('textfield', 'min:3'));
+            return $this->removeTasks();
+        }
 
-            if (!empty($task))
+        // Check form nonce for CREATE requests.
+        if (wp_verify_nonce(Input::get(APP_NONCE), 'task_create'))
+        {
+            return $this->createTask();
+        }
+
+        // If nothing, simply return the tasks list.
+        // Redirect.
+        wp_redirect(home_url('tasks'));
+        exit;
+    }
+
+    /**
+     * Handle the POST request in order to create a task.
+     *
+     * @return mixed
+     */
+    private function createTask()
+    {
+        // Get the submitted task value.
+        $task = Validator::single(Input::get('task'), array('textfield', 'min:3'));
+
+        if (!empty($task))
+        {
+            // Insert task data.
+            $t = new TasksModel($this->user);
+            $inserted = $t->insert($task);
+
+            // Return task list view with update message.
+            if ($inserted)
             {
-                // Insert task data.
-                $t = new TasksModel($this->user);
-                $inserted = $t->insert($task);
-
-                // Return task list view with update message.
-                if ($inserted)
-                {
-                    return View::make('tasks.all')->with(array(
-                        'message'       => 'Task created successfully.',
-                        'query'         => new WP_Query($this->query)
-                    ));
-                }
-
-                // Tell the user the task already exists.
-                wp_redirect(wp_nonce_url(home_url('tasks/create/'), 'task_exist', 'action'));
-                exit;
+                return View::make('tasks.all')->with(array(
+                    'message'       => 'Task created successfully.',
+                    'query'         => new WP_Query($this->query)
+                ));
             }
+
+            // Tell the user the task already exists.
+            wp_redirect(wp_nonce_url(home_url('tasks/create/'), 'task_exist', 'action'));
+            exit;
         }
 
         // Error when processing the task. The validation fails.
         wp_redirect(wp_nonce_url(home_url('tasks/create/'), 'task_error', 'action'));
+        exit;
+    }
+
+    /**
+     * Handle the POST request in order to remove
+     * completed tasks.
+     *
+     * @return mixed
+     */
+    private function removeTasks()
+    {
+        // Processed / deleted tasks.
+        $processed = array();
+        $selectedTasks = (array) Input::get('task_check');
+
+        foreach ($selectedTasks as $task)
+        {
+            $task = Validator::single($task, array('num'));
+
+            if (is_numeric($task))
+            {
+                $processed[] = wp_delete_post($task, true);
+            }
+        }
+
+        $error = array_filter($processed, function($task)
+        {
+            if (!$task)
+            {
+                return true;
+            }
+        });
+
+        // If there is an error during the delete process.
+        // Redirect to tasks list and display a message.
+        if ($error)
+        {
+            wp_redirect(wp_nonce_url(home_url('tasks'), 'error_completed_tasks', 'action'));
+            exit;
+        }
+
+        // Everything is deleted/removed.
+        // Simply redirect to tasks list.
+        wp_redirect(home_url('tasks'));
         exit;
     }
 
