@@ -19,10 +19,11 @@
                     $dueDate = Meta::get(Loop::id(), 'task_due_date')
                 ?>
                 <li>
-                    <p>{{ Form::checkbox('task_check[]', Loop::id()) }} - {{ Loop::title() }} - <a href="{{ wp_nonce_url(home_url('tasks/'.Loop::id().'/edit/'), 'edit_task', 'action') }}">Edit</a> - <a href="{{ wp_nonce_url(home_url('tasks/'.Loop::id().'/delete/'), 'delete_task', 'action') }}">Delete</a></p>
+                    <p>{{ Form::checkbox('task_check[]', Loop::id()) }} - {{ Loop::title() }} - <a href="{{ wp_nonce_url(home_url('tasks/'.Loop::id().'/edit/'), 'edit_task', 'action') }}">Edit</a> - <a href="{{ wp_nonce_url(home_url('tasks/'.Loop::id().'/delete/'), 'delete_task', 'action') }}">Delete</a> -
                     @if(!empty($dueDate))
-                        <p>{{{ $dueDate }}}</p>
+                        <b>{{{ $dueDate }}}</b>
                     @endif
+                    </p>
                 </li>
             @endwhile
         </ul>
