@@ -48,11 +48,13 @@ class TasksController extends BaseController
     {
         $action = $query->get('task_action');
 
+        // Look for the create task action.
         if ('create' === $action)
         {
             return $this->create();
         }
 
+        // Default tasks list view.
         // Grab the nonce action.
         $a = Input::get('action');
 
@@ -75,6 +77,17 @@ class TasksController extends BaseController
             return View::make('tasks.all')->with(array(
                 'query'     => new WP_Query($this->query),
                 'message'   => 'Task deleted successfully.'
+            ));
+        }
+
+        // Check for cleared/removed task action.
+        $removed = wp_verify_nonce($a, 'tasks_list_cleared');
+
+        if ($removed)
+        {
+            return View::make('tasks.all')->with(array(
+                'query'     => new WP_Query($this->query),
+                'message'   => 'Tasks list updated successfully.'
             ));
         }
 
@@ -230,7 +243,7 @@ class TasksController extends BaseController
 
         // Everything is deleted/removed.
         // Simply redirect to tasks list.
-        wp_redirect(home_url('tasks'));
+        wp_redirect(wp_nonce_url(home_url('tasks'), 'tasks_list_cleared', 'action'));
         exit;
     }
 
