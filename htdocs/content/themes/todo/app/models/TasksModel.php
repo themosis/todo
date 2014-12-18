@@ -77,11 +77,6 @@ class TasksModel {
      */
     public function update($task, $title)
     {
-        if ($this->taskExists($title))
-        {
-            return false;
-        }
-
         return wp_update_post(array(
             'ID' => $task->ID,
             'post_title' => $title

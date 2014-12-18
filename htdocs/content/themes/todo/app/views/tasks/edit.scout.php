@@ -10,7 +10,8 @@
 
 {{ Form::open() }}
 
-{{ Form::text('task', $task->post_title) }}
-{{ Form::submit('edit', 'Edit task') }}
+<p>{{ Form::text('task', $task->post_title) }} - Due date ? - {{ Form::text('schedule', Meta::get($task->ID, 'task_due_date')) }}</p>
+
+<p>{{ Form::submit('edit', 'Edit task') }}</p>
 
 {{ Form::close() }}

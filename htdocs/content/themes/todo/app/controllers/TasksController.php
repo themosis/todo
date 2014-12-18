@@ -376,6 +376,10 @@ class TasksController extends BaseController
                 // send the user back to its tasks list.
                 if ($updated)
                 {
+                    // Update the due date as well.
+                    $date = Validator::single(Input::get('schedule'), array('textfield'));
+                    $t->setDate($updated, $date);
+
                     wp_redirect(wp_nonce_url(home_url('tasks'), 'task_updated', 'action'));
                     exit;
                 }
