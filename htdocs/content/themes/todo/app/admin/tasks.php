@@ -9,6 +9,11 @@ $tasks = PostType::make('tasks', 'Tasks', 'Task')->set(array(
     'has_archive'           => true
 ));
 
+// Add custom metabox in order to view task details.
+// Example: due date,...
+$view = View::make('tasks.metabox.details');
+Metabox::make('Details', $tasks->getSlug(), array('priority' => 'high'), $view)->set();
+
 // Define a custom rewrite rule and endpoints for the tasks.
 add_action('init', function() use ($tasks)
 {
