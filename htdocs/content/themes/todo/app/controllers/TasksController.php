@@ -165,11 +165,15 @@ class TasksController extends BaseController
         {
             // Insert task data.
             $t = new TasksModel($this->user);
-            $inserted = $t->insert($task);
+            $inserted = $t->insert($task); // Return the task ID
 
             // Return task list view with update message.
             if ($inserted)
             {
+                // Add task due date.
+                $date = Validator::single(Input::get('schedule'), array('textfield'));
+                $t->setDate($inserted, $date);
+
                 return View::make('tasks.all')->with(array(
                     'message'       => 'Task created successfully.',
                     'query'         => new WP_Query($this->query)

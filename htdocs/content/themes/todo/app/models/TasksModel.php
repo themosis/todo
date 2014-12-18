@@ -22,6 +22,13 @@ class TasksModel {
      */
     private $user;
 
+    /**
+     * The task due date meta key.
+     *
+     * @var string
+     */
+    private $date_meta = 'task_due_date';
+
     public function __construct($user)
     {
         $this->user = $user;
@@ -79,6 +86,19 @@ class TasksModel {
             'ID' => $task->ID,
             'post_title' => $title
         ));
+    }
+
+    /**
+     * Register due date for a specific task.
+     *
+     * @param int $id The task ID
+     * @param string $newDate The due date for a task.
+     * @return void
+     */
+    public function setDate($id, $newDate)
+    {
+        $currentDate = Meta::get($id, $this->date_meta);
+        update_post_meta($id, $this->date_meta, $newDate, $currentDate);
     }
 
     /**

@@ -10,7 +10,8 @@
 
 {{ Form::open('tasks', 'post', false, array('nonce' => APP_NONCE, 'nonce_action' => 'task_create')) }}
 
-{{ Form::text('task') }}
-{{ Form::submit('create', 'Create Task') }}
+<p>{{ Form::text('task') }} - Due date ? - {{ Form::text('schedule') }}</p>
+
+<p>{{ Form::submit('create', 'Create Task') }}</p>
 
 {{ Form::close() }}
