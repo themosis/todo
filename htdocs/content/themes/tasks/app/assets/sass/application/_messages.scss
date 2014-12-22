@@ -1,11 +1,11 @@
 .messages-wrapper{
-  min-height: 40px;
+  min-height: 32px;
   padding: 2em 0;
 }
 
 .messages{
   p{
-    @include font-size(20);
+    @include font-size(16);
     font-weight: 600;
     color: $white;
     padding: 0.5em 1em;

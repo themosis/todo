@@ -1,5 +1,5 @@
-@mixin button($background-color: $light-blue, $color: $white){
-  @include font-size(18);
+@mixin button($background-color: $light-blue, $color: $white, $size: 16){
+  @include font-size($size);
   font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-weight: 400;
   color: $color;

@@ -37,6 +37,6 @@
   }
 
   input[type="submit"]{
-    @include button();
+    @include button($light-blue, $white, 18);
   }
 }

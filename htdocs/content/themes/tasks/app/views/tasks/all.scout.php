@@ -18,7 +18,7 @@
 
 @section('content')
     @if($query->have_posts())
-        <ul>
+        <ul class="tasks-list">
             @while($query->have_posts())
             <?php
             $query->the_post();
@@ -27,11 +27,27 @@
             $dueDate = Meta::get(Loop::id(), 'task_due_date')
             ?>
             <li>
-                <p>{{ Form::checkbox('task_check[]', Loop::id()) }}{{ Loop::title() }} | <a href="{{ wp_nonce_url(home_url('tasks/'.Loop::id().'/edit/'), 'edit_task', 'action') }}">Edit</a> - <a href="{{ wp_nonce_url(home_url('tasks/'.Loop::id().'/delete/'), 'delete_task', 'action') }}">Delete</a>
-                    @if(!empty($dueDate))
-                    | <b>{{{ $dueDate }}}</b>
-                    @endif
-                </p>
+                <div class="task">
+                    <div class="clearfix">
+                        <div class="task__checked left">
+                            {{ Form::checkbox('task_check[]', Loop::id()) }}
+                        </div>
+                        <div class="task__date left">
+                            @if(!empty($dueDate))
+                                <p>{{{ $dueDate }}}</p>
+                            @else
+                                <p>---</p>
+                            @endif
+                        </div>
+                        <div class="task__name left">
+                            <p>{{ Loop::title() }}</p>
+                        </div>
+                    </div>
+                    <div class="task__tools">
+                        <a class="edit-task" href="{{ wp_nonce_url(home_url('tasks/'.Loop::id().'/edit/'), 'edit_task', 'action') }}">Edit</a>
+                        <a class="delete-task" href="{{ wp_nonce_url(home_url('tasks/'.Loop::id().'/delete/'), 'delete_task', 'action') }}">Delete</a>
+                    </div>
+                </div>
             </li>
             @endwhile
         </ul>
