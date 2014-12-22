@@ -1,0 +1,160 @@
+.tasks-list{
+  width: 100%;
+
+  li{
+    width: 100%;
+    margin-bottom: 1px;
+  }
+}
+
+.task{
+  position: relative;
+  width: 100%;
+  background-color: $white;
+  @include border-radius(2px, 2px);
+  padding: 1em 0;
+}
+
+.task__tools{
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 50;
+  display: none;
+
+  a, a:link, a:active, a:visited{
+    color: $white;
+    @include font-size(14);
+    text-transform: uppercase;
+    font-weight: 600;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    padding: 18px 1em 19px;
+    margin-left: -4px;
+  }
+
+  .edit-task, .edit-task:link, .edit-task:active, .edit-task:visited{
+    background-color: $light-blue;
+  }
+
+  .edit-task:hover{
+    background-color: shade($light-blue, 20%);
+  }
+
+  .delete-task, .delete-task:link, .delete-task:active, .delete-task:visited{
+    background-color: $red;
+    @include border-radius(0 2px 2px 0);
+  }
+
+  .delete-task:hover{
+    background-color: shade($red, 20%);
+  }
+}
+
+.task:hover{
+  .task__tools{
+    display: block;
+  }
+}
+
+.task__checked{
+  width: 5%;
+  text-align: center;
+}
+
+.task__date{
+  min-width: 20%;
+  width: 20%;
+
+  p{
+    text-align: center;
+    @include font-size(14);
+    color: $placeholder;
+    line-height: 18px;
+  }
+}
+
+.task__name{
+  width: 75%;
+
+  p{
+    @include font-size(16);
+    color: $light-blue;
+    font-weight: 600;
+  }
+}
+
+.task__date--set{
+  padding: 0 1em;
+
+  .due-date, .due-date:hover{
+    width: 32px;
+    height: 32px;
+    cursor: pointer;
+    outline: none;
+    border: none;
+    background: url("../images/calendar.png") 0 0 no-repeat;
+    overflow: hidden;
+    text-indent: -9999px;
+    display: inline-block;
+  }
+
+  p{
+    color: $placeholder;
+    @include font-size(14);
+    text-align: center;
+  }
+}
+
+.task__name--set{
+  width: 90%;
+
+  input[type="text"]{
+    background-color: $white;
+    border:none;
+    outline: none;
+    border-left: 1px solid $placeholder;
+    color: $light-blue;
+    @include font-size(16);
+    font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-weight: 600;
+    padding: 6px 5px 6px 13px;
+    width: 100%;
+  }
+
+  p{
+    @include font-size(16);
+    color: $light-blue;
+    font-weight: 600;
+  }
+}
+
+.submit{
+  padding: 2.5em 0 0 0;
+  text-align: center;
+}
+
+.ays{
+  padding: 2.5em 0 0 0;
+  text-align: center;
+  @include font-size(16);
+  font-weight: 600;
+  color: $white;
+}
+
+.create-task{
+  @include button($green, $white, 18);
+}
+
+.create-task:hover{
+  @include button(shade($green, 20%), $white, 18);
+}
+
+.delete-task{
+  @include button($red, $white, 18);
+}
+
+.delete-task:hover{
+  @include button(shade($red, 20%), $white, 18);
+}
