@@ -1,0 +1,38 @@
+.toolbar{
+  width: 100%;
+  padding: 1.2em 0;
+  background-color: $blue;
+}
+
+.toolbar__actions{
+  width: 33.33%;
+}
+
+.toolbar__title{
+  width: 33.33%;
+  padding: 9px 0;
+
+  h3{
+    text-align: center;
+    @include font-size(20);
+    color: $dark-blue;
+    @include single-text-shadow(false, 1px, 0px, false, $shadow);
+    font-weight: 600;
+  }
+}
+
+.toolbar__auth{
+  width: 33.33%;
+  padding: 10px 0;
+  text-align: right;
+
+  a, a:link, a:active, a:visited{
+    color: $white;
+    text-decoration: none;
+    @include font-size(16);
+  }
+
+  a:hover{
+    text-decoration: underline;
+  }
+}
