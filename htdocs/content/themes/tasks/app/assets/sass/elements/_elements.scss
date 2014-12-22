@@ -2,6 +2,26 @@ body{
   background-color: $dark-blue;
 }
 
+.container{
+  position: relative;
+  width: $width;
+  margin: 0 auto;
+}
+
+.clearfix:before,
+.clearfix:after {
+  content: " "; /* 1 */
+  display: table; /* 2 */
+}
+
+.clearfix:after {
+  clear: both;
+}
+
+.left{
+  float: left;
+}
+
 @import "texts";
 @import "buttons";
 @import "forms";
