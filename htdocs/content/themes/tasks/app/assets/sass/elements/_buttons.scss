@@ -29,9 +29,14 @@
 
 .remove-task{
   @include button($red);
+  display: none;
   margin-left: 0.3em;
 }
 
 .remove-task:hover{
   @include button(shade($red, 20%));
+}
+
+.remove-task.show{
+  display: inline-block;
 }

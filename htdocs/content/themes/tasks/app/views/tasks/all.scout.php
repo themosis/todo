@@ -28,9 +28,9 @@
             ?>
             <li>
                 <div class="task">
-                    <div class="clearfix">
+                    <div class="task__content clearfix">
                         <div class="task__checked left">
-                            {{ Form::checkbox('task_check[]', Loop::id()) }}
+                            {{ Form::checkbox('task_check[]', Loop::id(), array('class' => 'check')) }}
                         </div>
                         <div class="task__date left">
                             @if(!empty($dueDate))

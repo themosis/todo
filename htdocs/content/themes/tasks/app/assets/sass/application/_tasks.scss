@@ -66,6 +66,10 @@
   .task__tools{
     display: block;
   }
+
+  .task__tools.hide{
+    display: none;
+  }
 }
 
 .task__checked{
@@ -86,8 +90,12 @@
     @include font-size(14);
     color: $placeholder;
     line-height: 18px;
-    border-left: 1px solid $placeholder;
+    border-left: 1px solid $separator;
     padding: 5px 0;
+  }
+
+  .done{
+    text-decoration: line-through;
   }
 }
 
@@ -98,8 +106,13 @@
     @include font-size(16);
     color: $light-blue;
     font-weight: 600;
-    border-left: 1px solid $placeholder;
+    border-left: 1px solid $separator;
     padding: 5px 0 5px 1em;
+  }
+
+  .done{
+    text-decoration: line-through;
+    color: $separator;
   }
 }
 
@@ -132,7 +145,7 @@
     background-color: $white;
     border:none;
     outline: none;
-    border-left: 1px solid $placeholder;
+    border-left: 1px solid $separator;
     color: $light-blue;
     @include font-size(16);
     font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
