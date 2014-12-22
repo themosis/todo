@@ -138,10 +138,14 @@
     text-align: center;
     padding: 6px 0;
   }
+
+  p.has-date{
+    margin: -28px 0 0 44px;
+  }
 }
 
 .task__name--set{
-  width: 90%;
+  width: 73%;
 
   input[type="text"]{
     background-color: $white;

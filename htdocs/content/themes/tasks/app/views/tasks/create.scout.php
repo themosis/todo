@@ -19,7 +19,7 @@
         <div class="task">
             <div class="clearfix">
                 <div class="task__date--set left">
-                    {{ Form::hidden('schedule') }}
+                    {{ Form::hidden('schedule', '', array('class' => 'datekeeper')) }}
                     {{ Form::button('toggleDate', 'Pick a date', array('class' => 'due-date')) }}
                 </div>
                 <div class="task__name--set left">

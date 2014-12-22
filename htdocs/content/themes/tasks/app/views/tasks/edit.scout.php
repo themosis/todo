@@ -22,12 +22,10 @@
                     <?php
                         $date = Meta::get($task->ID, 'task_due_date');
                     ?>
-                    {{ Form::hidden('schedule', $date) }}
-
-                    @if(empty($date))
-                        {{ Form::button('toggleDate', 'Pick a date', array('class' => 'due-date')) }}
-                    @else
-                        <p>{{{ $date }}}</p>
+                    {{ Form::hidden('schedule', $date, array('class' => 'datekeeper')) }}
+                    {{ Form::button('toggleDate', 'Pick a date', array('class' => 'due-date')) }}
+                    @if(!empty($date))
+                        <p class="has-date">{{{ $date }}}</p>
                     @endif
                 </div>
                 <div class="task__name--set left">

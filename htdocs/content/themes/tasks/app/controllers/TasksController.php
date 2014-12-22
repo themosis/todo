@@ -26,6 +26,9 @@ class TasksController extends BaseController
             exit;
         }
 
+        // Will handle the assets.
+        $this->composers();
+
         $this->user = User::current();
 
         // Main query parameters used to display the tasks list.
@@ -56,9 +59,6 @@ class TasksController extends BaseController
         }
 
         // Default tasks list view.
-        // Load assets
-        Asset::add('js-tasks', 'js/tasks.js', array('jquery'), '1.0', true);
-
         // Grab the nonce action.
         $a = Input::get('action');
 
@@ -106,6 +106,7 @@ class TasksController extends BaseController
      */
     private function create()
     {
+        // Start create...
         $action = Input::get('action');
 
         // Nonce to check in order to access the default create task view.
@@ -453,5 +454,29 @@ class TasksController extends BaseController
             'task'      => $post,
             'error'     => 'Something went wrong. Try again please.'
         ));
+    }
+
+    /**
+     * View composers for tasks.
+     * Mainly used in this scenario to load the appropriate assets.
+     *
+     * @return void
+     */
+    private function composers()
+    {
+        // Main tasks view composer.
+        View::composer('tasks.all', function()
+        {
+            Asset::add('js-tasks', 'js/tasks.js', array('jquery'), '1.0', true);
+        });
+
+        // Create/add/edit view composer.
+        View::composer(array('tasks.create', 'tasks.edit'), function()
+        {
+            Asset::add('js-lib-moment', 'js/library/moment.js', array('jquery'), '2.8.4', true);
+            Asset::add('js-lib-pikaday', 'js/library/pikaday.js', array('js-lib-moment'), '1.0', true);
+            Asset::add('js-lib-pikaday-plugin', 'js/library/pikaday.jquery.js', array('js-lib-pikaday'), '1.0', true);
+            Asset::add('js-date', 'js/date.js', array('js-lib-pikaday-plugin'), '1.0', true);
+        });
     }
 }
