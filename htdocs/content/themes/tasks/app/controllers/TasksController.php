@@ -46,6 +46,7 @@ class TasksController extends BaseController
      */
     public function index($post, $query)
     {
+        // Start...
         $action = $query->get('task_action');
 
         // Look for the create task action.
@@ -55,6 +56,9 @@ class TasksController extends BaseController
         }
 
         // Default tasks list view.
+        // Load assets
+        Asset::add('js-tasks', 'js/tasks.js', array('jquery'), '1.0', true);
+
         // Grab the nonce action.
         $a = Input::get('action');
 
