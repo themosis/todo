@@ -1,5 +1,5 @@
 <?php
-    $dueDate = Meta::get(Input::get('post'), 'task_due_date');
+    $dueDate = Meta::get($__post->ID, 'task_due_date');
     $dueDate = !empty($dueDate) ? $dueDate : __('No due date.');
 ?>
 <div>
