@@ -12,6 +12,7 @@
   text-decoration: none;
   display: inline-block;
   line-height: 100%;
+  outline: none;
 }
 
 .add-task, .add-task:link, .add-task:active, .add-task:visited{
@@ -20,6 +21,10 @@
 
 .add-task:hover{
   @include button(shade($light-blue, 20%));
+}
+
+.back-to-tasks{
+  @extend .add-task;
 }
 
 .remove-task{

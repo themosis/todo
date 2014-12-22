@@ -1,17 +1,34 @@
-<h2>Create task:</h2>
+@extends('layouts.tasks')
 
-@if(isset($error))
-    <p>{{{ $error }}}</p>
-@endif
+@section('toolbar')
+    <a class="back-to-tasks" href="{{ home_url('tasks') }}">< Back</a>
+@stop
 
-<p>
-    <a href="{{ home_url('tasks') }}">Back to tasks list</a>
-</p>
+@section('toolbar_title')
+    <h3>Add new task</h3>
+@stop
 
-{{ Form::open('tasks', 'post', false, array('nonce' => APP_NONCE, 'nonce_action' => 'task_create')) }}
+@section('messages')
+    @if(isset($error))
+        <p>{{{ $error }}}</p>
+    @endif
+@stop
 
-<p>{{ Form::text('task') }} - Due date ? - {{ Form::text('schedule') }}</p>
+@section('content')
+    {{ Form::open('tasks', 'post', false, array('nonce' => APP_NONCE, 'nonce_action' => 'task_create')) }}
 
-<p>{{ Form::submit('create', 'Create Task') }}</p>
+    <div class="task">
+        <div class="clearfix">
+            <div class="task__date--set left">
+                {{ Form::hidden('schedule') }}
+                {{ Form::button('toggleDate', 'Pick a date', array('class' => 'due-date')) }}
+            </div>
+            <div class="task__name--set left">
+                {{ Form::text('task', '', array('placeholder' => 'Type your task here...')) }}
+            </div>
+        </div>
+    </div>
+    <p class="submit">{{ Form::submit('create', '+ Add task', array('class' => 'create-task')) }}</p>
 
-{{ Form::close() }}
+    {{ Form::close() }}
+@stop
