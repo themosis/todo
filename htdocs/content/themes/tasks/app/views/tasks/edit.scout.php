@@ -29,7 +29,7 @@
                     @endif
                 </div>
                 <div class="task__name--set left">
-                    {{ Form::text('task', $task->post_title, array('placeholder' => 'Type your task here...')) }}
+                    {{ Form::text('task', $task->post_title, array('placeholder' => 'Type your task here...', 'autocomplete' => 'off')) }}
                 </div>
             </div>
         </div>

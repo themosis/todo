@@ -23,7 +23,7 @@
                     {{ Form::button('toggleDate', 'Pick a date', array('class' => 'due-date')) }}
                 </div>
                 <div class="task__name--set left">
-                    {{ Form::text('task', '', array('placeholder' => 'Type your task here...')) }}
+                    {{ Form::text('task', '', array('placeholder' => 'Type your task here...', 'autocomplete' => 'off')) }}
                 </div>
             </div>
         </div>
