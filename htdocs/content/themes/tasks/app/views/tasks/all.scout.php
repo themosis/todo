@@ -55,7 +55,7 @@
     <?php wp_reset_postdata(); ?>
 
     @if(!$query->have_posts())
-        <p>Yeah! No tasks for today. <a href="{{ wp_nonce_url(home_url('tasks/create/'), 'create_task', 'action') }}">Add a task ?</a></p>
+        <p class="no-tasks">Yeah! No tasks for today.</p>
     @endif
 @stop
 

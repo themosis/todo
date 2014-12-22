@@ -15,7 +15,7 @@
   h3{
     text-align: center;
     @include font-size(20);
-    color: $dark-blue;
+    color: $darker-blue;
     @include single-text-shadow(false, 1px, 0px, false, $shadow);
     font-weight: 600;
   }

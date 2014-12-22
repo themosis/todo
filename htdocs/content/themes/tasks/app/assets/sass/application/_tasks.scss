@@ -1,3 +1,11 @@
+.no-tasks{
+  text-align: center;
+  @include font-size(36);
+  color: $darker-blue;
+  @include single-text-shadow(false, 1px, 0px, false, $shadow);
+  font-weight: 700;
+}
+
 .tasks-list{
   width: 100%;
 
