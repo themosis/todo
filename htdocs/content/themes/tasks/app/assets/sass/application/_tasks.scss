@@ -20,7 +20,7 @@
   width: 100%;
   background-color: $white;
   @include border-radius(2px, 2px);
-  padding: 1em 0;
+  padding: 0.7em 0;
 }
 
 .task__tools{
@@ -33,6 +33,7 @@
   a, a:link, a:active, a:visited{
     color: $white;
     @include font-size(14);
+    line-height: 14px;
     text-transform: uppercase;
     font-weight: 600;
     text-align: center;
@@ -40,6 +41,7 @@
     display: inline-block;
     padding: 18px 1em 19px;
     margin-left: -4px;
+    overflow-y: hidden;
   }
 
   .edit-task, .edit-task:link, .edit-task:active, .edit-task:visited{
@@ -69,6 +71,10 @@
 .task__checked{
   width: 5%;
   text-align: center;
+
+  input{
+    margin-top: 8px;
+  }
 }
 
 .task__date{
@@ -80,6 +86,8 @@
     @include font-size(14);
     color: $placeholder;
     line-height: 18px;
+    border-left: 1px solid $placeholder;
+    padding: 5px 0;
   }
 }
 
@@ -90,6 +98,8 @@
     @include font-size(16);
     color: $light-blue;
     font-weight: 600;
+    border-left: 1px solid $placeholder;
+    padding: 5px 0 5px 1em;
   }
 }
 
