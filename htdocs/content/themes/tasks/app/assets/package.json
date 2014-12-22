@@ -1,0 +1,23 @@
+{
+  "name": "TasksManager",
+  "version": "1.0.0",
+  "description": "TasksManager assets.",
+  "main": "/",
+  "scripts": {
+    "test": "/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "/"
+  },
+  "keywords": [
+    "/"
+  ],
+  "author": "Julien Lambé",
+  "license": "GPLv2",
+  "devDependencies": {
+    "grunt": "~0.4.5",
+    "grunt-contrib-watch": "~0.6.1",
+    "grunt-contrib-compass": "~1.0.0"
+  }
+}

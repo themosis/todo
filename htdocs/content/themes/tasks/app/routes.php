@@ -13,7 +13,7 @@ Route::get('home', function(){
 
     if (!is_user_logged_in())
     {
-        return View::make('welcome');
+        return View::make('pages.home');
     }
 
     // Logged in users are automatically redirected to their tasks list.

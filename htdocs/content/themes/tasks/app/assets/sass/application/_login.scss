@@ -1,0 +1,42 @@
+.login {
+  width: 400px;
+  margin: 100px auto 0;
+
+  h1{
+    text-align: center;
+    @include font-size(30);
+    color: $red;
+    text-transform: uppercase;
+    font-weight: 700;
+  }
+}
+
+.login__form{
+  padding-top: 2em;
+
+  label{
+    display: inline-block;
+    color: $white;
+    @include font-size(18);
+    margin-bottom: 1em;
+  }
+
+  input[type="text"], input[type="password"]{
+    width: 390px;
+    @include border-radius(3px, 3px);
+    background-color: $white;
+    color: $dark-blue;
+    border: none;
+    outline: none;
+    padding: 10px 5px 9px;
+    margin-bottom: 1em;
+  }
+
+  .login-remember, .login-submit{
+    text-align: center;
+  }
+
+  input[type="submit"]{
+    @include button();
+  }
+}

@@ -18,3 +18,7 @@ composer.lock
 
 ### Environment Credentials
 .env.*.php
+
+### Build processors
+/htdocs/content/themes/tasks/app/assets/node_modules/
+/htdocs/content/themes/tasks/app/assets/.sass-cache/
