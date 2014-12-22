@@ -7,7 +7,7 @@
 @section('toolbar')
     <a href="{{ wp_nonce_url(home_url('tasks/create/'), 'create_task', 'action') }}" class="add-task">+ Add task</a>
     <!-- Remove completed tasks -->
-    {{ Form::submit('remove', '- Remove', array('class' => 'remove-task')) }}
+    {{ Form::submit('remove', 'Remove', array('class' => 'remove-task')) }}
 @overwrite
 
 @section('messages')

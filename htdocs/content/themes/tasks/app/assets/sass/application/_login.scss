@@ -39,4 +39,8 @@
   input[type="submit"]{
     @include button($light-blue, $white, 18);
   }
+
+  input[type="submit"]:hover{
+    @include button(shade($light-blue, 20%), $white, 18);
+  }
 }

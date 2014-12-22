@@ -16,19 +16,17 @@
 
 @section('content')
     {{ Form::open('tasks', 'post', false, array('nonce' => APP_NONCE, 'nonce_action' => 'task_create')) }}
-
-    <div class="task">
-        <div class="clearfix">
-            <div class="task__date--set left">
-                {{ Form::hidden('schedule') }}
-                {{ Form::button('toggleDate', 'Pick a date', array('class' => 'due-date')) }}
-            </div>
-            <div class="task__name--set left">
-                {{ Form::text('task', '', array('placeholder' => 'Type your task here...')) }}
+        <div class="task">
+            <div class="clearfix">
+                <div class="task__date--set left">
+                    {{ Form::hidden('schedule') }}
+                    {{ Form::button('toggleDate', 'Pick a date', array('class' => 'due-date')) }}
+                </div>
+                <div class="task__name--set left">
+                    {{ Form::text('task', '', array('placeholder' => 'Type your task here...')) }}
+                </div>
             </div>
         </div>
-    </div>
-    <p class="submit">{{ Form::submit('create', '+ Add task', array('class' => 'create-task')) }}</p>
-
+        <p class="submit">{{ Form::submit('create', '+ Add task', array('class' => 'create-task')) }}</p>
     {{ Form::close() }}
 @stop

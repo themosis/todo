@@ -1,21 +1,40 @@
-<h2>Delete task:</h2>
+@extends('layouts.tasks')
 
-@if(isset($error))
-    <p>{{ $error }}</p>
-@endif
+@section('toolbar')
+    <a class="back-to-tasks" href="{{ home_url('tasks') }}">< Back</a>
+@stop
 
-<p>
-    <a href="{{ home_url('tasks') }}">Back to tasks list</a>
-</p>
+@section('toolbar_title')
+    <h3>Delete task</h3>
+@stop
 
-<p>Are you sure you want to delete this task ?</p>
-<ul>
-    <li>{{ $task->post_title }}</li>
-</ul>
+@section('messages')
+    @if(isset($error))
+        <p>{{{ $error }}}</p>
+    @endif
+@stop
 
-{{ Form::open() }}
-
-{{ Form::hidden('task', $task->ID) }}
-{{ Form::submit('delete', 'Delete task') }}
-
-{{ Form::close() }}
+@section('content')
+    <div class="task">
+        <div class="clearfix">
+            <div class="task__date--set left">
+                <?php
+                    $date = Meta::get($task->ID, 'task_due_date')
+                ?>
+                @if(empty($date))
+                    <p>---</p>
+                @else
+                    <p>{{ $date }}</p>
+                @endif
+            </div>
+            <div class="task__name--set left">
+                <p>{{ $task->post_title }}</p>
+            </div>
+        </div>
+    </div>
+    {{ Form::open() }}
+        {{ Form::hidden('task', $task->ID) }}
+        <p class="ays">Are you sure you want to delete this task ?</p>
+        <p class="submit">{{ Form::submit('delete', 'Delete task', array('class' => 'delete-task')) }}</p>
+    {{ Form::close() }}
+@stop
