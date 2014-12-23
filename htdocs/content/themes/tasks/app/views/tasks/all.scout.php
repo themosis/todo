@@ -11,7 +11,7 @@
 @overwrite
 
 @section('messages')
-    @if(isset($message) && $message)
+    @if(!empty($message))
         <p>{{ $message }}</p>
     @endif
 @stop

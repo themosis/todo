@@ -3,18 +3,18 @@
 class TasksController extends BaseController
 {
     /**
-     * Default tasks loop query.
-     *
-     * @var \WP_Query
-     */
-    private $query = array();
-
-    /**
      * The current user ID.
      *
      * @var \Themosis\User\User
      */
     private $user;
+
+    /**
+     * The tasks model instance.
+     *
+     * @var \TasksModel
+     */
+    private $model;
 
     public function __construct()
     {
@@ -27,17 +27,13 @@ class TasksController extends BaseController
         }
 
         // Will handle the assets.
-        $this->composers();
+        $this->loadAssets();
 
+        // Set the current user.
         $this->user = User::current();
 
-        // Main query parameters used to display the tasks list.
-        $this->query = array(
-            'post_type'         => 'tasks',
-            'posts_per_page'    => 500,
-            'post_status'       => 'publish',
-            'author'            => $this->user->ID
-        );
+        // Set the tasks model
+        $this->model = new TasksModel($this->user);
     }
 
     /**
@@ -61,42 +57,31 @@ class TasksController extends BaseController
         // Default tasks list view.
         // Grab the nonce action.
         $a = Input::get('action');
+        $message = '';
 
         // Check for editing task action.
-        $updated = wp_verify_nonce($a, 'task_updated');
-
-        if ($updated)
+        if (wp_verify_nonce($a, 'task_updated'))
         {
-            return View::make('tasks.all')->with(array(
-                'query'     => new WP_Query($this->query),
-                'message'   => 'Task updated successfully.'
-            ));
+            $message = 'Task updated successfully.';
         }
 
         // Check for deleted task action.
-        $deleted = wp_verify_nonce($a, 'task_deleted');
-
-        if ($deleted)
+        if (wp_verify_nonce($a, 'task_deleted'))
         {
-            return View::make('tasks.all')->with(array(
-                'query'     => new WP_Query($this->query),
-                'message'   => 'Task deleted successfully.'
-            ));
+            $message = 'Task deleted successfully.';
         }
 
         // Check for cleared/removed task action.
-        $removed = wp_verify_nonce($a, 'tasks_list_cleared');
-
-        if ($removed)
+        if (wp_verify_nonce($a, 'tasks_list_cleared'))
         {
-            return View::make('tasks.all')->with(array(
-                'query'     => new WP_Query($this->query),
-                'message'   => 'Tasks list updated successfully.'
-            ));
+            $message = 'Tasks list updated successfully.';
         }
 
         // Default output. Display a list of tasks.
-        return View::make('tasks.all')->with('query', new WP_Query($this->query));
+        return View::make('tasks.all')->with(array(
+            'query'     => $this->model->getQuery(),
+            'message'   => $message
+        ));
     }
 
     /**
@@ -182,19 +167,18 @@ class TasksController extends BaseController
         if (!empty($task))
         {
             // Insert task data.
-            $t = new TasksModel($this->user);
-            $inserted = $t->insert($task); // Return the task ID
+            $inserted = $this->model->insert($task); // Return the task ID
 
             // Return task list view with update message.
             if ($inserted)
             {
                 // Add task due date.
                 $date = Validator::single(Input::get('schedule'), array('textfield'));
-                $t->setDate($inserted, $date);
+                $this->model->setDate($inserted, $date);
 
                 return View::make('tasks.all')->with(array(
                     'message'       => 'Task created successfully.',
-                    'query'         => new WP_Query($this->query)
+                    'query'         => $this->model->getQuery()
                 ));
             }
 
@@ -387,8 +371,7 @@ class TasksController extends BaseController
             // update the task.
             if (!empty($taskInput))
             {
-                $t = new TasksModel($this->user);
-                $updated = $t->update($post, $taskInput);
+                $updated = $this->model->update($post, $taskInput);
 
                 // If task post updated
                 // send the user back to its tasks list.
@@ -396,7 +379,7 @@ class TasksController extends BaseController
                 {
                     // Update the due date as well.
                     $date = Validator::single(Input::get('schedule'), array('textfield'));
-                    $t->setDate($updated, $date);
+                    $this->model->setDate($updated, $date);
 
                     wp_redirect(wp_nonce_url(home_url('tasks'), 'task_updated', 'action'));
                     exit;
@@ -457,20 +440,19 @@ class TasksController extends BaseController
     }
 
     /**
-     * View composers for tasks.
-     * Mainly used in this scenario to load the appropriate assets.
+     * Load tasks assets.
      *
      * @return void
      */
-    private function composers()
+    private function loadAssets()
     {
-        // Main tasks view composer.
+        // Tasks list assets.
         View::composer('tasks.all', function()
         {
             Asset::add('js-tasks', 'js/tasks.js', array('jquery'), '1.0', true);
         });
 
-        // Create/add/edit view composer.
+        // Create/add/edit task assets
         View::composer(array('tasks.create', 'tasks.edit'), function()
         {
             Asset::add('js-lib-moment', 'js/library/moment.js', array('jquery'), '2.8.4', true);

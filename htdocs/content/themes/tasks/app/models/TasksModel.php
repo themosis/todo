@@ -32,7 +32,15 @@ class TasksModel {
     public function __construct($user)
     {
         $this->user = $user;
+    }
 
+    /**
+     * Return a task query instance.
+     *
+     * @return \WP_Query
+     */
+    public function getQuery()
+    {
         $query = new WP_Query(array(
             'post_type'         => $this->slug,
             'posts_per_page'    => 1000,
@@ -40,8 +48,7 @@ class TasksModel {
             'author'            => $this->user->ID
         ));
 
-        // Fill the tasks property.
-        $this->tasks = $query->get_posts();
+        return $query;
     }
 
     /**
@@ -104,7 +111,7 @@ class TasksModel {
      */
     private function taskExists($title)
     {
-        $task = array_filter($this->tasks, function($t) use ($title)
+        $task = array_filter($this->getQuery()->get_posts(), function($t) use ($title)
         {
             if ($title === $t->post_title)
             {
