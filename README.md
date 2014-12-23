@@ -1,15 +1,23 @@
-Themosis framework
-------------------
+Tasks Application
+-----------------
 
-Themosis framework is a tool to help you develop websites and web applications faster using [WordPress](http://wordpress.org). Using an elegant and simple code syntax, Themosis framework helps you structure and organize your code and allows you to better manage and scale your WordPress websites and applications.
+This repository is an example of a simple tasks management application build using WordPress and the Themosis framework.
 
-Themosis framework uses “modern” PHP features like anonymous functions, namespaces, is [Composer](https://getcomposer.org/) ready and is a mix between WordPress best practices and let’s say a typical MVC framework.
+Feel free to download the repo and install it locally for testing and exploring the APIs used from the Themosis framework. Follow the steps below in order to install this application on your computer.
 
-The Themosis framework is born to give WordPress developers the development joy found in the [Laravel](http://laravel.com/) framework to WordPress development. As WordPress developers, you are happy by definition. Now with the Themosis framework you'll be happier and you'll be able to provide more features to your projects in less time.
+## Installation
 
-## Official documentation
-
-The documentation is available on the Themosis framework website.
+1. Download this repository on your machine.
+2. Open a Console or Terminal and navigate to the root of this repository.
+3. Run `composer install` in order to install WordPress, the Themosis framework and other dependencies.
+4. Fill in the `env.local.php` file with your local environment credentials.
+5. Set your local hostname or local environment variable in the `config/environment.php` file. For more information regarding installation, check also the [Themosis framework documentation](http://framework.themosis.com/docs/installation/) for detailed explanations.
+6. Set the `htdocs` folder as your webserver public directory.
+7. Open your browser and navigate to your local server address (specified in your `env.local.php` file).
+8. Install WordPress
+9. Log in the administration.
+10. Under `appearance->themes`, activate the Themosis theme available.
+11. Visit the home page of your application. Enjoy!
 
 ---
 
