@@ -17,7 +17,8 @@ Feel free to download the repo and install it locally for testing and exploring 
 8. Install WordPress
 9. Log in the administration.
 10. Under `appearance->themes`, activate the Themosis theme available.
-11. Visit the home page of your application. Enjoy!
+11. Set a permalink structure other than default.
+12. Visit the home page of your application. Enjoy!
 
 ---
 
