@@ -10,7 +10,7 @@
 
 @section('messages')
     @if(isset($error))
-        <p>{{{ $error }}}</p>
+        <p class="error">{{{ $error }}}</p>
     @endif
 @stop
 

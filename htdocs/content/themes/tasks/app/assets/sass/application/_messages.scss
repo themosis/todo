@@ -11,4 +11,8 @@
     padding: 0.5em 1em;
     border-left: 4px solid $green;
   }
+
+  p.error{
+    border-left: 4px solid $red;
+  }
 }
