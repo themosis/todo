@@ -76,7 +76,17 @@
   width: 5%;
   text-align: center;
 
-  input{
+  label{
+    text-indent: -9999px;
+    overflow: hidden;
+    display: block;
+    width: 20px;
+    height: 23px;
+    margin: 0 0 0 15px;
+  }
+
+  input[type="checkbox"]{
+    display: block;
     margin-top: 8px;
   }
 }

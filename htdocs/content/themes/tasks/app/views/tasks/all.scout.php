@@ -30,7 +30,7 @@
                 <div class="task">
                     <div class="task__content clearfix">
                         <div class="task__checked left">
-                            {{ Form::checkbox('task_check[]', Loop::id(), array('class' => 'check')) }}
+                            {{ Form::checkbox('task_check', Loop::id(), '', array('class' => 'check')) }}
                         </div>
                         <div class="task__date left">
                             @if(!empty($dueDate))

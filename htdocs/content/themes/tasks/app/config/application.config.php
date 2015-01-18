@@ -75,7 +75,7 @@ return array(
 		'Themosis\\Facades\\Taxonomy'				=> 'Taxonomy',
 		'Themosis\\Facades\\User'					=> 'User',
         'Themosis\\Facades\\Validator'              => 'Validator',
-		'Themosis\\View\\Loop'						=> 'Loop',
+		'Themosis\\Facades\\Loop'					=> 'Loop',
 		'Themosis\\Facades\\View'					=> 'View'
 	)
 
